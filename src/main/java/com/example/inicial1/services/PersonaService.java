@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PersonaService {
@@ -38,13 +39,21 @@ public class PersonaService {
             }
         }
 
-        boolean isMutant = isMutant(adn);
+        String adnString = String.join(" ", adn);
 
-        Persona persona = new Persona();
-        persona.setAdn(adn);
-        persona.setMutant(isMutant);
+        Optional<Persona> personaRegistrada = pr.findByAdn(adnString);
 
-        return pr.save(persona);
+        if(personaRegistrada.isPresent()) {
+            return personaRegistrada.get();
+        } else {
+            boolean isMutant = isMutant(adn);
+
+            Persona persona = new Persona();
+            persona.setAdn(adn);
+            persona.setMutant(isMutant);
+
+            return pr.save(persona);
+        }
     }
 
     public static boolean isMutant(String[] adn) {
