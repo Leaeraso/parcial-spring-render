@@ -16,6 +16,7 @@ public class PersonaService {
 
     private static final int SEQUENCE_LENGTH = 4;
     private static final int REQUIRED_MUTANT_SEQUENCES = 2;
+    private static char lastValueSequence = '\0';
 
     public Persona savePersona(String[] adn) {
         //Validar que no sea un array vacio
@@ -84,11 +85,16 @@ public class PersonaService {
     // Metodo Auxiliar
     private static boolean checkSequence(String[] adn, int i, int j, int deltaI, int deltaJ) {
         char firstChar = adn[i].charAt(j);
+
         for (int k = 1; k < SEQUENCE_LENGTH; k++) {
             if (adn[i + k * deltaI].charAt(j + k * deltaJ) != firstChar) {
                 return false;
             }
         }
+        if(firstChar == lastValueSequence) {
+            return false;
+        }
+        lastValueSequence = firstChar;
         return true;
     }
 
