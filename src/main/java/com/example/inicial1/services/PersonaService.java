@@ -39,21 +39,13 @@ public class PersonaService {
             }
         }
 
-        String adnString = String.join(" ", adn);
+        boolean isMutant = isMutant(adn);
 
-        Optional<Persona> personaRegistrada = pr.findByAdn(adnString);
+        Persona persona = new Persona();
+        persona.setAdn(adn);
+        persona.setMutant(isMutant);
+        return pr.save(persona);
 
-        if(personaRegistrada.isPresent()) {
-            return personaRegistrada.get();
-        } else {
-            boolean isMutant = isMutant(adn);
-
-            Persona persona = new Persona();
-            persona.setAdn(adn);
-            persona.setMutant(isMutant);
-
-            return pr.save(persona);
-        }
     }
 
     public static boolean isMutant(String[] adn) {
