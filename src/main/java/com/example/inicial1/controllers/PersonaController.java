@@ -17,15 +17,6 @@ public class PersonaController {
     @Autowired
     protected PersonaService ps;
 
-    @GetMapping("/stats")
-    public ResponseEntity<?> getStatistics() {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(ps.getMutantStatistics());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente mas tarde.\"}");
-        }
-    }
-
     @PostMapping("/mutant/")
     public ResponseEntity<?> save(@RequestBody Map<String, String[]> request) {
         try {

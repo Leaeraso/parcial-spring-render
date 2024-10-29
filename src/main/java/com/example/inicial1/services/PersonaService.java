@@ -1,13 +1,13 @@
 package com.example.inicial1.services;
 
 import com.example.inicial1.entities.Persona;
-import com.example.inicial1.dto.DTOStatistics;
 import com.example.inicial1.repositories.PersonaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PersonaService {
@@ -16,7 +16,7 @@ public class PersonaService {
 
     private static final int SEQUENCE_LENGTH = 4;
     private static final int REQUIRED_MUTANT_SEQUENCES = 2;
-    private static char lastValueSequence = '\0';
+    //private static char lastValueSequence = '\0';
 
     public Persona savePersona(String[] adn) {
         //Validar que no sea un array vacio
@@ -51,30 +51,30 @@ public class PersonaService {
 
     public static boolean isMutant(String[] adn) {
         int n = adn.length;
-        int mutantSequences = 0;
+        Set<Character> uniqueSequences = new HashSet<>();
 
         // Algoritmo de reconocimiento
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 // Secuencia horizontal
                 if (j <= n - SEQUENCE_LENGTH && checkSequence(adn, i, j, 0, 1)) {
-                    mutantSequences++;
-                    if (mutantSequences >= REQUIRED_MUTANT_SEQUENCES) return true;
+                    uniqueSequences.add(adn[i].charAt(j));
+                    if (uniqueSequences.size() >= REQUIRED_MUTANT_SEQUENCES) return true;
                 }
                 // Secuencia vertical
                 if (i <= n - SEQUENCE_LENGTH && checkSequence(adn, i, j, 1, 0)) {
-                    mutantSequences++;
-                    if (mutantSequences >= REQUIRED_MUTANT_SEQUENCES) return true;
+                    uniqueSequences.add(adn[i].charAt(j));
+                    if (uniqueSequences.size() >= REQUIRED_MUTANT_SEQUENCES) return true;
                 }
                 // Secuencia diagonal derecha
                 if (i <= n - SEQUENCE_LENGTH && j <= n - SEQUENCE_LENGTH && checkSequence(adn, i, j, 1, 1)) {
-                    mutantSequences++;
-                    if (mutantSequences >= REQUIRED_MUTANT_SEQUENCES) return true;
+                    uniqueSequences.add(adn[i].charAt(j));
+                    if (uniqueSequences.size() >= REQUIRED_MUTANT_SEQUENCES) return true;
                 }
                 // Secuencia diagonal izquierda
                 if (i <= n - SEQUENCE_LENGTH && j >= SEQUENCE_LENGTH - 1 && checkSequence(adn, i, j, 1, -1)) {
-                    mutantSequences++;
-                    if (mutantSequences >= REQUIRED_MUTANT_SEQUENCES) return true;
+                    uniqueSequences.add(adn[i].charAt(j));
+                    if (uniqueSequences.size() >= REQUIRED_MUTANT_SEQUENCES) return true;
                 }
             }
         }
@@ -91,30 +91,6 @@ public class PersonaService {
                 return false;
             }
         }
-        if(firstChar == lastValueSequence) {
-            return false;
-        }
-        lastValueSequence = firstChar;
         return true;
     }
-
-    public DTOStatistics getMutantStatistics() {
-        List<Persona> personas = pr.findAll();
-        int mutantCount = 0;
-        int nonMutantCount = 0;
-
-        for (Persona persona : personas) {
-            if (persona.isMutant()) {
-                mutantCount++;
-            } else {
-                nonMutantCount++;
-            }
-        }
-
-        double ratio = nonMutantCount > 0 ? (double) mutantCount / nonMutantCount : mutantCount;
-
-        return new DTOStatistics(mutantCount, nonMutantCount, ratio);
-    }
-
-
 }

@@ -1,4 +1,4 @@
-package com.example.inicial1;
+package com.example.mutants;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
