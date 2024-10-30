@@ -21,7 +21,7 @@ public class PersonaController {
     public ResponseEntity<?> save(@RequestBody Map<String, String[]> request) {
         try {
             String[] adn = request.get("adn");
-            return ResponseEntity.status(HttpStatus.CREATED).body(ps.savePersona(adn));
+            return ResponseEntity.status(HttpStatus.OK).body(ps.savePersona(adn));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("{\"error\":\"Error interno. Por favor intente más tarde.\"}");
         }
