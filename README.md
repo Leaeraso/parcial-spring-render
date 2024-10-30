@@ -15,7 +15,7 @@ adn-mutante:
   "adn": ["ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "CCCCTA", "TCACTG"]
 }
 
-Endpoint para obtener las estadisticas: GEt /personas/api/v1/stats
+Endpoint para obtener las estadisticas: GET /personas/api/v1/stats
 
 Alumno: Leandro Eraso 50006
 
